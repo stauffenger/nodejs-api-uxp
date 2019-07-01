@@ -8,7 +8,7 @@ import (
 	"html/template"
 	"log"
 	"strconv"	
-	_ "./src/github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type projeto struct{
