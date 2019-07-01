@@ -8,7 +8,7 @@ import (
 	"html/template"
 	"log"
 	"strconv"	
-	//_ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type projeto struct{
@@ -67,11 +67,11 @@ func main()  {
 		panic(err)
 	}
 
-	http.HandleFunc("/", indexHandler)
+	/*http.HandleFunc("/", indexHandler)
 	
 	porta := os.Getenv("PORT")
 	if porta == "" {
 		porta = "5000"
 	}
-	http.ListenAndServe(":" + porta, nil)
+	http.ListenAndServe(":" + porta, nil)*/
 }
