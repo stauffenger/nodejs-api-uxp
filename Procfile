@@ -1,1 +1,1 @@
-web: src/bin/go-api-uxp
+web: bin/go-api-uxp
