@@ -1,0 +1,8 @@
+{
+    "ImportPath": "src/bin/go-api-uxp",
+    "GoVersion": "go1.12",
+    "Packages": [
+        "./..."
+    ],
+    "Deps": []
+}

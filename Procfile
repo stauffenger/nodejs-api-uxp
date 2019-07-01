@@ -1,0 +1,1 @@
+web: src/bin/go-api-uxp
