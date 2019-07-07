@@ -29,10 +29,40 @@ function getProjetos(request, response) {
     .finally(() => clientBancoDeDados.end())
 }
 
+function inserirProjeto(request, response) {
+    let clientBancoDeDados = novoClient()
+    clientBancoDeDados.connect()
+    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios"))
+    .then(resultados => response.json(resultados.rows))
+    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
+    .finally(() => clientBancoDeDados.end())
+}
+
+function deletarProjeto(request, response) {
+    let clientBancoDeDados = novoClient()
+    clientBancoDeDados.connect()
+    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios"))
+    .then(resultados => response.json(resultados.rows))
+    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
+    .finally(() => clientBancoDeDados.end())
+}
+
+function editarProjeto(request, response) {
+    let clientBancoDeDados = novoClient()
+    clientBancoDeDados.connect()
+    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios"))
+    .then(resultados => response.json(resultados.rows))
+    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
+    .finally(() => clientBancoDeDados.end())
+}
+
 function login(request, response) {
     let clientBancoDeDados = novoClient()
     let senha = request.body.senha
-    let login = request.body.usuario
+    let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as senha FROM usuarios WHERE login = $2", [senha, usuario]))
@@ -41,5 +71,41 @@ function login(request, response) {
     .finally(() => clientBancoDeDados.end())
 }
 
+function inserirCadastro(request, response) {
+    let clientBancoDeDados = novoClient()
+    clientBancoDeDados.connect()
+    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios"))
+    .then(resultados => response.json(resultados.rows))
+    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
+    .finally(() => clientBancoDeDados.end())
+}
+
+function deletarCadastro(request, response) {
+    let clientBancoDeDados = novoClient()
+    clientBancoDeDados.connect()
+    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios"))
+    .then(resultados => response.json(resultados.rows))
+    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
+    .finally(() => clientBancoDeDados.end())
+}
+
+function editarCadastro(request, response) {
+    let clientBancoDeDados = novoClient()
+    clientBancoDeDados.connect()
+    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios"))
+    .then(resultados => response.json(resultados.rows))
+    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
+    .finally(() => clientBancoDeDados.end())
+}
+
 module.exports.getProjetos = getProjetos
+module.exports.inserirProjeto = inserirProjeto
+module.exports.deletarProjeto = deletarProjeto
+module.exports.editarProjeto = editarProjeto
 module.exports.login = login
+module.exports.inserirCadastro = inserirCadastro
+module.exports.deletarCadastro = deletarCadastro
+module.exports.editarCadastro = editarCadastro
