@@ -1,0 +1,23 @@
+{
+  "name": "nodejs-api-uxp",
+  "version": "1.0.0",
+  "description": "API de acesso ao banco de dados, PostgreSQL, do site UXP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stauffenger/go-api-uxp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stauffenger/go-api-uxp/issues"
+  },
+  "homepage": "https://github.com/stauffenger/go-api-uxp#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.11.0"
+  }
+}
