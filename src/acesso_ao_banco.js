@@ -36,7 +36,10 @@ function inserirProjeto(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, autor) VALUES($1, $2, $3)", [titulo, descricao, usuario]))
+    .then(() => {
+        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
+        clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) VALUES($1, $2, $3)", [titulo, descricao, id_usuario])
+    })
     .then(response.json([{ "query" : "true" }]))
     .catch(erro => {
         console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro)
@@ -51,7 +54,10 @@ function deletarProjeto(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND usuario = $2", [titulo, usuario]))
+    .then(() => {
+        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
+        clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = $2", [titulo, id_usuario])
+    })
     .then(response.json([{ "query" : "true" }]))
     .catch(erro => {
         console.error("Erro ao tentar deletar projeto no banco de dados.", erro)
@@ -68,7 +74,10 @@ function editarProjeto(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND autor = $4", [titulo, descricao, tituloAntigo, usuario]))
+    .then(() => {
+        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
+        clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND id_autor = $4", [titulo, descricao, tituloAntigo, id_usuario])
+    })
     .then(response.json([{ "query" : "true" }]))
     .catch(erro => {
         console.error("Erro ao tentar editar projeto no banco de dados.", erro)
