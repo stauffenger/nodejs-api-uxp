@@ -23,7 +23,7 @@ function getProjetos(request, response) {
     let clientBancoDeDados = novoClient()
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT titulo, descricao, autor FROM projetos"))
+    .then(() => clientBancoDeDados.query("SELECT titulo, descricao, login as autor FROM projetos, usuarios WHERE id_autor = id_usuarios"))
     .then(resultados => response.json(resultados.rows))
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
