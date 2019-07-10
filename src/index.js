@@ -2,9 +2,11 @@ const clientBancoDeDados = require('./acesso_ao_banco')
 const jsonwebtoken = require('jsonwebtoken')
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const SENHA_JWT = process.env.SENHA_JWT
 const PORTA = process.env.PORT || 5000
 
+app.use(cors())
 app.get('/', indexHandler)
 app.get('/projetos', projetosHandler)
 app.post('/projetos/inserir', projetosInserirHandler)
