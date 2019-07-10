@@ -92,7 +92,7 @@ function login(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as senha FROM usuarios WHERE login = $2", [senha, usuario]))
+    .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as autenticacao FROM usuarios WHERE login = $2", [senha, usuario]))
     .then(resultado => response.json(resultado.rows[0]))
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
