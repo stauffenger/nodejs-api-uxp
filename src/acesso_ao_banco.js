@@ -40,10 +40,10 @@ function inserirProjeto(request, response) {
         let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
         clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) VALUES($1, $2, $3)", [titulo, descricao, id_usuario])
     })
-    .then(response.json({ "query" : "true" }))
+    .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro)
-        response.json({ "query" : "false" })
+        response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
 }
@@ -58,10 +58,10 @@ function deletarProjeto(request, response) {
         let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
         clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = $2", [titulo, id_usuario])
     })
-    .then(response.json({ "query" : "true" }))
+    .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar deletar projeto no banco de dados.", erro)
-        response.json({ "query" : "false" })
+        response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
 }
@@ -78,10 +78,10 @@ function editarProjeto(request, response) {
         let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
         clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND id_autor = $4", [titulo, descricao, tituloAntigo, id_usuario])
     })
-    .then(response.json({ "query" : "true" }))
+    .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar editar projeto no banco de dados.", erro)
-        response.json({ "query" : "false" })
+        response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
 }
@@ -93,7 +93,13 @@ function login(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as autenticacao FROM usuarios WHERE login = $2", [senha, usuario]))
-    .then(resultado => response.json(resultado.rows[0]))
+    .then(resultado => {
+        if (resultado.rows[0] === undefined) {
+            response.json({ "autenticacao" : false })
+        } else {
+            response.json(resultado.rows[0])
+        }
+    })
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
 }
@@ -105,10 +111,10 @@ function inserirCadastro(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("INSERT INTO usuarios(login, senha) VALUES($1, crypt($2, gen_salt('bf')))", [usuario, senha]))
-    .then(response.json({ "query" : "true" }))
+    .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar cadastrar usuario no banco de dados.", erro)
-        response.json({ "query" : "false" })
+        response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
 }
@@ -119,15 +125,15 @@ function deletarCadastro(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("DELETE FROM usuarios WHERE usuario = $1", usuario))
-    .then(response.json({ "query" : "true" }))
+    .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar deletar cadastro no banco de dados.", erro)
-        response.json({ "query" : "false" })
+        response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())*/
     let usuario = request.body.usuario
     console.log("Tentativa de deletar o cadastro $1 no banco de dados", usuario)
-    response.json({ "query" : "false" })
+    response.json({ "query" : false })
 }
 
 function editarCadastro(request, response) {
@@ -137,10 +143,10 @@ function editarCadastro(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("UPDATE usuarios SET senha = $1 WHERE usuario = $2", [senha, usuario]))
-    .then(response.json({ "query" : "true" }))
+    .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar editar cadastro no banco de dados.", erro)
-        response.json({ "query" : "false" })
+        response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
 }
