@@ -3,10 +3,13 @@ const jsonwebtoken = require('jsonwebtoken')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const SENHA_JWT = process.env.SENHA_JWT
 const PORTA = process.env.PORT || 5000
 
 app.use(cors())
+app.use(bodyParser.json())
+
 app.get('/', indexHandler)
 app.get('/projetos', projetosHandler)
 app.post('/projetos/inserir', projetosInserirHandler)
