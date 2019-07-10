@@ -88,8 +88,8 @@ function editarProjeto(request, response) {
 
 function login(request, response) {
     let clientBancoDeDados = novoClient()
-    let senha = request.body['senha']
-    let usuario = request.body['usuario']
+    //let senha = request.body['senha']
+    //let usuario = request.body['usuario']
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as senha FROM usuarios WHERE login = $2", ['chiclete', 'lucaspascoal']))//[senha, usuario]))
