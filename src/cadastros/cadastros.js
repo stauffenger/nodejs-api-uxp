@@ -43,7 +43,10 @@ function inserirCadastro(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("INSERT INTO usuarios(login, senha) VALUES($1, crypt($2, gen_salt('bf')))", [usuario, senha]))
+    .then(async () => {
+        await clientBancoDeDados.query("INSERT INTO usuarios(login, senha) VALUES($1, crypt($2, gen_salt('bf')))", [usuario, senha])
+        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
+    })
     .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar cadastrar usuario no banco de dados.", erro)
@@ -75,7 +78,10 @@ function editarCadastro(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("UPDATE usuarios SET senha = $1 WHERE usuario = $2", [senha, usuario]))
+    .then(async () => {
+        await clientBancoDeDados.query("UPDATE usuarios SET senha = $1 WHERE usuario = $2", [senha, usuario])
+        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
+    })
     .then(response.json({ "query" : true }))
     .catch(erro => {
         console.error("Erro ao tentar editar cadastro no banco de dados.", erro)

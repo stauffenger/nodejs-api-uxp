@@ -55,9 +55,10 @@ function deletarProjeto(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => {
-        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
-        clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = $2", [titulo, id_usuario])
+    .then(async () => {
+        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = '" + usuario + "')"
+        await clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = $2", [titulo, id_usuario])
+        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
     .catch(erro => {
@@ -75,9 +76,10 @@ function editarProjeto(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => {
-        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
-        clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND id_autor = $4", [titulo, descricao, tituloAntigo, id_usuario])
+    .then(async () => {
+        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = '" + usuario + "')"
+        await clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND id_autor = $4", [titulo, descricao, tituloAntigo, id_usuario])
+        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
     .catch(erro => {
