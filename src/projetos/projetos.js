@@ -37,8 +37,8 @@ function inserirProjeto(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => {
-        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = " + usuario + ")"
-        clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) VALUES($1, $2, $3)", [titulo, descricao, id_usuario])
+        let id_usuario = "SELECT id_usuarios FROM usuarios WHERE login like " + usuario.toString() ;
+        clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) VALUES($1, $2, $3)", [titulo.toString(), descricao.toString(), id_usuario])
     })
     .then(response.json({ "query" : true }))
     .catch(erro => {
