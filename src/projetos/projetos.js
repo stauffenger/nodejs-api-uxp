@@ -23,7 +23,7 @@ function getProjetos(request, response) {
     let clientBancoDeDados = novoClient()
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT titulo, descricao FROM projetos")) //SELECT titulo, descricao, login as autor FROM projetos, usuarios WHERE id_autor = id_usuarios
+    .then(() => clientBancoDeDados.query("SELECT titulo, descricao, login as autor FROM projetos, usuarios WHERE id_autor = id_usuarios"))
     .then(resultados => response.json(resultados.rows))
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
@@ -36,9 +36,10 @@ function inserirProjeto(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => {
-        let id_usuario = "SELECT id_usuarios FROM usuarios WHERE login like " + usuario.toString() ;
-        clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) VALUES($1, $2, $3)", [titulo.toString(), descricao.toString(), id_usuario])
+    .then(async () => {
+        let subquery = "(SELECT '" + titulo + "', '" + descricao + "', id_usuarios FROM usuarios WHERE login like '" + usuario +"')"
+        await clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) " + subquery)
+        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
     .catch(erro => {
