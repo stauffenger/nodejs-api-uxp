@@ -56,8 +56,8 @@ function deletarProjeto(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
-        let id_usuario = "(SELECT id_usuarios FROM usuarios WHERE login = '" + usuario + "')"
-        await clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = $2", [titulo, id_usuario])
+        let subquery = "(SELECT id_usuarios FROM usuarios WHERE login = '" + usuario + "')"
+        await clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = " + subquery , [titulo])
         .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
