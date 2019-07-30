@@ -23,7 +23,7 @@ function getProjetos(request, response) {
     let clientBancoDeDados = novoClient()
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT titulo, descricao, login as autor FROM projetos, usuarios WHERE id_autor = id_usuarios"))
+    .then(() => clientBancoDeDados.query("SELECT titulo, descricao, usuario as autor FROM projetos, usuarios WHERE id_autor = id_usuario"))
     .then(resultados => response.json(resultados.rows))
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
@@ -37,7 +37,7 @@ function inserirProjeto(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
-        let subquery = "(SELECT '" + titulo + "', '" + descricao + "', id_usuarios FROM usuarios WHERE login like '" + usuario +"')"
+        let subquery = "(SELECT '" + titulo + "', '" + descricao + "', id_usuario FROM usuarios WHERE usuario like '" + usuario +"')"
         await clientBancoDeDados.query("INSERT INTO projetos(titulo, descricao, id_autor) " + subquery)
         .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })
@@ -56,8 +56,8 @@ function deletarProjeto(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
-        let subquery = "(SELECT id_usuarios FROM usuarios WHERE login = '" + usuario + "')"
-        await clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = " + subquery , [titulo])
+        let subquery = "(SELECT id_usuario FROM usuarios WHERE usuario = '" + usuario + "')"
+        await clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = " + subquery , titulo)
         .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
@@ -77,7 +77,7 @@ function editarProjeto(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
-        let subquery = "(SELECT id_usuarios FROM usuarios WHERE login = '" + usuario + "')"
+        let subquery = "(SELECT id_usuario FROM usuarios WHERE usuario = '" + usuario + "')"
         await clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND id_autor = " + subquery, [titulo, descricao, tituloAntigo])
         .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
     })

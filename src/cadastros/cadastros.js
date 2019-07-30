@@ -25,7 +25,7 @@ function login(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as autenticacao FROM usuarios WHERE login = $2", [senha, usuario]))
+    .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as autenticacao FROM usuarios WHERE usuario = $2", [senha, usuario]))
     .then(resultado => {
         if (resultado.rows[0] === undefined) {
             response.json({ "autenticacao" : false })
@@ -42,7 +42,7 @@ function getCadastro(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT login as usuario FROM usuarios WHERE login = $2", usuario))
+    .then(() => clientBancoDeDados.query("SELECT usuario FROM usuarios WHERE usuario = $2", usuario))
     .then(resultado => {
         if (resultado.rows[0] === undefined) {
             response.json({ "usuario" : false })
@@ -61,7 +61,7 @@ function inserirCadastro(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
-        await clientBancoDeDados.query("INSERT INTO usuarios(login, senha) VALUES($1, crypt($2, gen_salt('bf')))", [usuario, senha])
+        await clientBancoDeDados.query("INSERT INTO usuarios(usuario, senha) VALUES($1, crypt($2, gen_salt('bf')))", [usuario, senha])
         .catch(erro =>console.error("Erro ao tentar cadastrar usuario no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
@@ -78,7 +78,7 @@ function deletarCadastro(request, response) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then( async () => {
-        await clientBancoDeDados.query("DELETE FROM usuarios WHERE login = $1", id_usuario)
+        await clientBancoDeDados.query("DELETE FROM usuarios WHERE usuario = $1", id_usuario)
         .catch(erro =>console.error("Erro ao tentar deletar cadastro no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
