@@ -25,10 +25,10 @@ function login(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT senha = crypt($1, senha) as autenticacao FROM usuarios WHERE usuario = $2", [senha, usuario]))
+    .then(() => clientBancoDeDados.query("SELECT (senha = crypt($1, senha) AND senha = status) as autenticacao, status FROM usuarios WHERE usuario = $2", [senha, usuario]))
     .then(resultado => {
         if (resultado.rows[0] === undefined) {
-            response.json({ "autenticacao" : false })
+            response.json({ "autenticacao" : false, "status" : null })
         } else {
             response.json(resultado.rows[0])
         }
@@ -42,7 +42,7 @@ function getCadastro(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT usuario FROM usuarios WHERE usuario = $2", usuario))
+    .then(() => clientBancoDeDados.query("SELECT usuario, status FROM usuarios WHERE usuario = $2", usuario))
     .then(resultado => {
         if (resultado.rows[0] === undefined) {
             response.json({ "usuario" : false })

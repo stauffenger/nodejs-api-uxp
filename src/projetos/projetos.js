@@ -23,7 +23,10 @@ function getProjetos(request, response) {
     let clientBancoDeDados = novoClient()
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT titulo, descricao, usuario as autor FROM projetos, usuarios WHERE id_autor = id_usuario"))
+    .then( async () => {
+        await clientBancoDeDados.query("SELECT titulo, descricao, usuario as autor, edicao FROM projetos, usuarios WHERE id_autor = id_usuario ORDER BY data_criacao DESC")
+        .catch(erro =>console.error("Erro ao tentar pegar projetos no banco de dados.", erro))
+    })
     .then(resultados => response.json(resultados.rows))
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
@@ -58,7 +61,7 @@ function deletarProjeto(request, response) {
     .then(async () => {
         let subquery = "(SELECT id_usuario FROM usuarios WHERE usuario = '" + usuario + "')"
         await clientBancoDeDados.query("DELETE FROM projetos WHERE titulo = $1 AND id_autor = " + subquery , [titulo])
-        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
+        .catch(erro =>console.error("Erro ao tentar deletar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
     .catch(erro => {
@@ -78,8 +81,8 @@ function editarProjeto(request, response) {
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
         let subquery = "(SELECT id_usuario FROM usuarios WHERE usuario = '" + usuario + "')"
-        await clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2 WHERE titulo = $3 AND id_autor = " + subquery, [titulo, descricao, tituloAntigo])
-        .catch(erro =>console.error("Erro ao tentar cadastrar projeto no banco de dados.", erro))
+        await clientBancoDeDados.query("UPDATE projetos SET titulo = $1, descricao = $2, edicao = true WHERE titulo = $3 AND id_autor = " + subquery, [titulo, descricao, tituloAntigo])
+        .catch(erro =>console.error("Erro ao tentar editar projeto no banco de dados.", erro))
     })
     .then(response.json({ "query" : true }))
     .catch(erro => {
