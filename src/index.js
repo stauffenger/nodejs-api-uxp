@@ -1,4 +1,5 @@
 const clientBancoDeDados = require('./acesso_ao_banco')
+const logs = require('./logs/logs')
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -24,6 +25,8 @@ app.get('/cadastro', cadastroHandler)
 app.post('/cadastro/inserir', cadastroInserirHandler)
 app.post('/cadastro/deletar', cadastroDeletarHandler)
 app.post('/cadastro/editar', cadastroEditarHandler)
+
+app.post('/logs', logsHandler)
 
 app.listen(PORTA)
 
@@ -101,5 +104,11 @@ function cadastroDeletarHandler(request, response) {
 function cadastroEditarHandler(request, response) {
     if (autorizacao(request, response)) {
         clientBancoDeDados.editarCadastro(request, response)
+    }
+}
+
+function logsHandler(request, response) {
+    if (autorizacao(request, response)) {
+        logs.getLogs(request, response)
     }
 }

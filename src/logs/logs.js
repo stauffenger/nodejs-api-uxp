@@ -48,5 +48,20 @@ function inserirLog(operacao, usuario, tabela, log) {
     .finally(() => clientBancoDeDados.end())
 }
 
+function getLogs(request, response) {
+    let operacao = request.body.operacao
+    let admin = request.body.admin
+    if (admin === true) {
+        let clientBancoDeDados = novoClient()
+        clientBancoDeDados.connect()
+        .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
+        .then(() => clientBancoDeDados.query("SELECT * FROM log WHERE operacao = $2", operacao))
+        .then(resultados => response.json(resultados.rows))
+        .catch(erro => console.error("Erro ao tentar pegar logs no banco de dados.", erro))
+        .finally(() => clientBancoDeDados.end())
+    }
+}
+
 module.exports.login = login
 module.exports.logout = logout
+module.exports.getLogs = getLogs
