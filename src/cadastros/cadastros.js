@@ -5,6 +5,7 @@ const PORT_POSTGRE = process.env.PORT_POSTGRE
 const USER_POSTGRE = process.env.USER_POSTGRE
 const SSL_POSTGRE = process.env.SSL_POSTGRE
 
+const logs = require('./logs/logs')
 const {Client} = require('pg')
 
 function novoClient() {
@@ -27,6 +28,7 @@ function login(request, response) {
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("SELECT (senha = crypt($1, senha) AND senha = status) as autenticacao, status FROM usuarios WHERE usuario = $2", [senha, usuario]))
     .then(resultado => {
+        logs.login(usuario)
         if (resultado.rows[0] === undefined) {
             response.json({ "autenticacao" : false, "status" : null })
         } else {
@@ -35,6 +37,11 @@ function login(request, response) {
     })
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
+}
+
+function logout(request, response) {
+    let usuario = request.body.usuario
+    logs.logout(usuario)
 }
 
 function getCadastro(request, response) {
@@ -111,6 +118,7 @@ function editarCadastro(request, response) {
 }
 
 module.exports.login = login
+module.exports.logout = logout
 module.exports.getCadastro = getCadastro
 module.exports.inserirCadastro = inserirCadastro
 module.exports.deletarCadastro = deletarCadastro

@@ -18,6 +18,7 @@ app.post('/projetos/deletar', projetosDeletarHandler)
 app.post('/projetos/editar', projetosEditarHandler)
 
 app.post('/login', loginHandler)
+app.post('/logout', logoutHandler)
 
 app.get('/cadastro', cadastroHandler)
 app.post('/cadastro/inserir', cadastroInserirHandler)
@@ -72,6 +73,12 @@ function loginHandler(request, response) {
     if (autorizacao(request, response)) {
         //response.json(request.body.jwt)
         clientBancoDeDados.login(request, response)
+    }
+}
+
+function logoutHandler(request, response) {
+    if (autorizacao(request, response)) {
+        clientBancoDeDados.logout(request, response)
     }
 }
 
