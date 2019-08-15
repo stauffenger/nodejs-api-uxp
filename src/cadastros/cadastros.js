@@ -5,7 +5,7 @@ const PORT_POSTGRE = process.env.PORT_POSTGRE
 const USER_POSTGRE = process.env.USER_POSTGRE
 const SSL_POSTGRE = process.env.SSL_POSTGRE
 
-const logs = require('./logs/logs')
+const logs = require('../logs/logs')
 const {Client} = require('pg')
 
 function novoClient() {
