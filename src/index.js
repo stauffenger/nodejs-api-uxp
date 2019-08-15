@@ -1,5 +1,5 @@
 const clientBancoDeDados = require('./acesso_ao_banco')
-const logs = require('../logs/logs')
+const logs = require('./logs/logs')
 const express = require('express')
 const app = express()
 const cors = require('cors')
