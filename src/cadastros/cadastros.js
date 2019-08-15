@@ -26,7 +26,7 @@ function login(request, response) {
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT (senha = crypt($1, senha) AND crypt($1, senha) = status) as autenticacao, status FROM usuarios WHERE usuario = $2", [senha, usuario]))
+    .then(() => clientBancoDeDados.query("SELECT (senha = crypt($1, senha) AND status) as autenticacao, status FROM usuarios WHERE usuario = $2", [senha, usuario]))
     .then(resultado => {
         logs.login(usuario)
         if (resultado.rows[0] === undefined) {
