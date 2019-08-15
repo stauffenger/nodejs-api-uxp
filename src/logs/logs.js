@@ -38,13 +38,11 @@ function inserirLog(operacao, usuario, tabela, log) {
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(async () => {
-        let subquery = "(SELECT '" + operacao + "', agora(), id_usuario, '" + tabela + "', '" + log + "' FROM usuarios WHERE usuario like " + usuario + ")"
+        let subquery = "(SELECT '" + operacao + "', agora(), id_usuario, '" + tabela + "', '" + log + "' FROM usuarios WHERE usuario like '" + usuario + "')"
         await clientBancoDeDados.query("INSERT INTO LOG(operacao, stamp, id_usuario, tabela, log)" + subquery)
-        .catch(erro =>console.error("Erro ao tentar inserir log no banco de dados.", erro))
+        .catch(erro => console.error("Erro ao tentar inserir log no banco de dados.", erro))
     })
-    .catch(erro => {
-        console.error("Erro ao tentar inserir log no banco de dados.", erro)
-    })
+    .catch(erro => console.error("Erro ao tentar inserir log no banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
 }
 
