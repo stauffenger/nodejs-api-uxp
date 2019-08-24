@@ -4,7 +4,7 @@ const router = express.Router()
 const logs = require('./logs')
 const bancoDeDados = require('../acesso_ao_banco')
 
-function getCadastro(request, response) {
+router.get('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
@@ -19,9 +19,9 @@ function getCadastro(request, response) {
     })
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-function inserirCadastro(request, response) {
+router.put('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario
@@ -37,9 +37,9 @@ function inserirCadastro(request, response) {
         response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-function deletarCadastro(request, response) {
+router.delete('/', (request, response, next) => {
     /*let clientBancoDeDados = bancoDeDados.novoClient()
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
@@ -57,9 +57,9 @@ function deletarCadastro(request, response) {
     let usuario = request.body.usuario
     console.log("Tentativa de deletar o cadastro $1 no banco de dados", usuario)
     response.json({ "query" : false })
-}
+})
 
-function editarCadastro(request, response) {
+router.post('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario
@@ -75,6 +75,6 @@ function editarCadastro(request, response) {
         response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-module.exports.router
+module.exports = router

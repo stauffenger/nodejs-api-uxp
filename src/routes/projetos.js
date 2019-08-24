@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bancoDeDados = require('../acesso_ao_banco')
 
-function getProjetos(request, response) {
+router.get('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
@@ -10,9 +10,9 @@ function getProjetos(request, response) {
     .then(resultados => response.json(resultados.rows))
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-function inserirProjeto(request, response) {
+router.put('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let titulo = request.body.titulo
     let descricao = request.body.descricao
@@ -30,9 +30,9 @@ function inserirProjeto(request, response) {
         response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-function deletarProjeto(request, response) {
+router.delete('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let titulo = request.body.titulo
     let usuario = request.body.usuario
@@ -49,9 +49,9 @@ function deletarProjeto(request, response) {
         response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-function editarProjeto(request, response) {
+router.post('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let titulo = request.body.titulo
     let tituloAntigo = request.body.tituloAntigo
@@ -70,6 +70,6 @@ function editarProjeto(request, response) {
         response.json({ "query" : false })
     })
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-module.exports.router
+module.exports = router

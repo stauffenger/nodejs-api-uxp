@@ -4,7 +4,7 @@ const router = express.Router()
 const logs = require('./logs')
 const bancoDeDados = require('../acesso_ao_banco')
 
-function login(request, response) {
+router.post('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario
@@ -21,11 +21,6 @@ function login(request, response) {
     })
     .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
     .finally(() => clientBancoDeDados.end())
-}
+})
 
-function logout(request, response) {
-    let usuario = request.body.usuario
-    logs.logout(usuario)
-}
-
-module.exports.router
+module.exports = router

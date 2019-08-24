@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const cadastrosRoutes = require('./routes/cadastros')
 const loginRoutes = require('./routes/login')
+const logoutRoutes = require('./routes/logout')
 const logsRoutes = require('./routes/logs')
 const projetosRoutes = require('./routes/projetos')
 
@@ -22,6 +23,7 @@ app.get('/', indexHandler)
 
 app.use('/projetos', projetosRoutes)
 app.use('/login', loginRoutes)
+app.use('/logout', logoutRoutes)
 app.use('/logs', logsRoutes)
 app.use('/cadastro', cadastrosRoutes)
 
