@@ -1,5 +1,5 @@
 const clientBancoDeDados = require('./acesso_ao_banco')
-const logs = require('./logs/logs')
+const logs = require('./routes/logs')
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -8,7 +8,7 @@ const KEY_JWE = process.env.KEY_JWE
 const PORTA = process.env.PORT || 5000
 
 app.use(cors())
-app.use(express.json())
+app.use(express.json()) // Transforma o JSON do body em um objeto JavaScript
 
 app.get('/', indexHandler)
 
@@ -29,22 +29,6 @@ app.post('/logs', logsHandler)
 
 app.listen(PORTA)
 
-function autorizacao(request, response) {
-    /*let token = request.body.jwt
-    if(token !== undefined){
-        jose.JWE.createDecrypt(KEY_JWE)
-        .decrypt(token)
-        .then((resultado) => {
-            request.body.jwt = JSON.parse(resultado.payload)
-        })
-        .then(true)
-        .catch(erro => console.error("Erro ao descriptografar conteúdo do JWT", erro))
-    }
-    response.send("Acesso não autorizado. Você não deveria estar aqui!")
-    return false*/
-    return true
-}
-
 function indexHandler(request, response) {
     response.send("Bem-vindo a API do site UXP!")
 }
@@ -54,34 +38,23 @@ function projetosHandler(request, response) {
 }
 
 function projetosInserirHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.inserirProjeto(request, response)
-    }
+    clientBancoDeDados.inserirProjeto(request, response)
 }
 
 function projetosDeletarHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.deletarProjeto(request, response)
-    }
+    clientBancoDeDados.deletarProjeto(request, response)
 }
 
 function projetosEditarHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.editarProjeto(request, response)
-    }
+    clientBancoDeDados.editarProjeto(request, response)
 }
 
 function loginHandler(request, response) {
-    if (autorizacao(request, response)) {
-        //response.json(request.body.jwt)
-        clientBancoDeDados.login(request, response)
-    }
+    clientBancoDeDados.login(request, response)
 }
 
 function logoutHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.logout(request, response)
-    }
+    clientBancoDeDados.logout(request, response)
 }
 
 function cadastroHandler(request, response) {
@@ -89,25 +62,17 @@ function cadastroHandler(request, response) {
 }
 
 function cadastroInserirHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.inserirCadastro(request, response)
-    }
+    clientBancoDeDados.inserirCadastro(request, response)
 }
 
 function cadastroDeletarHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.deletarCadastro(request, response)
-    }
+    clientBancoDeDados.deletarCadastro(request, response)
 }
 
 function cadastroEditarHandler(request, response) {
-    if (autorizacao(request, response)) {
-        clientBancoDeDados.editarCadastro(request, response)
-    }
+    clientBancoDeDados.editarCadastro(request, response)
 }
 
 function logsHandler(request, response) {
-    if (autorizacao(request, response)) {
-        logs.getLogs(request, response)
-    }
+    logs.getLogs(request, response)
 }

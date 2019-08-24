@@ -1,5 +1,5 @@
-const projetos = require('./projetos/projetos')
-const cadastros = require('./cadastros/cadastros')
+const projetos = require('./routes/projetos')
+const cadastros = require('./routes/cadastros')
 
 module.exports.getProjetos = projetos.getProjetos
 module.exports.inserirProjeto = projetos.inserirProjeto
