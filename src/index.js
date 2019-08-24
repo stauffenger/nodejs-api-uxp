@@ -3,13 +3,12 @@ const logs = require('./logs/logs')
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const bodyParser = require('body-parser')
 const jose = require('node-jose');
 const KEY_JWE = process.env.KEY_JWE
 const PORTA = process.env.PORT || 5000
 
 app.use(cors())
-app.use(bodyParser.json())
+app.use(express.json())
 
 app.get('/', indexHandler)
 
