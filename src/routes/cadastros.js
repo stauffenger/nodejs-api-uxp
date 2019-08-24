@@ -1,51 +1,11 @@
-const DATABASE_POSTGRE = process.env.DATABASE_POSTGRE
-const HOST_POSTGRE = process.env.HOST_POSTGRE
-const PASSWORD_POSTGRE = process.env.PASSWORD_POSTGRE
-const PORT_POSTGRE = process.env.PORT_POSTGRE
-const USER_POSTGRE = process.env.USER_POSTGRE
-const SSL_POSTGRE = process.env.SSL_POSTGRE
+const express = require('express')
+const router = express.Router()
 
 const logs = require('./logs')
-const {Client} = require('pg')
-
-function novoClient() {
-    clientBancoDeDados = new Client({
-        user: USER_POSTGRE,
-        password: PASSWORD_POSTGRE,
-        host: HOST_POSTGRE,
-        port: PORT_POSTGRE,
-        database: DATABASE_POSTGRE,
-        ssl: SSL_POSTGRE
-    })
-    return clientBancoDeDados
-}
-
-function login(request, response) {
-    let clientBancoDeDados = novoClient()
-    let senha = request.body.senha
-    let usuario = request.body.usuario
-    clientBancoDeDados.connect()
-    .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT (senha = crypt($1, senha) AND status) as autenticacao, status FROM usuarios WHERE usuario = $2", [senha, usuario]))
-    .then(resultado => {
-        logs.login(usuario)
-        if (resultado.rows[0] === undefined) {
-            response.json({ "autenticacao" : false, "status" : null })
-        } else {
-            response.json(resultado.rows[0])
-        }
-    })
-    .catch(erro => console.error("Erro ao tentar conectar com o banco de dados.", erro))
-    .finally(() => clientBancoDeDados.end())
-}
-
-function logout(request, response) {
-    let usuario = request.body.usuario
-    logs.logout(usuario)
-}
+const bancoDeDados = require('../acesso_ao_banco')
 
 function getCadastro(request, response) {
-    let clientBancoDeDados = novoClient()
+    let clientBancoDeDados = bancoDeDados.novoClient()
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
@@ -62,7 +22,7 @@ function getCadastro(request, response) {
 }
 
 function inserirCadastro(request, response) {
-    let clientBancoDeDados = novoClient()
+    let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
@@ -80,7 +40,7 @@ function inserirCadastro(request, response) {
 }
 
 function deletarCadastro(request, response) {
-    /*let clientBancoDeDados = novoClient()
+    /*let clientBancoDeDados = bancoDeDados.novoClient()
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
@@ -100,7 +60,7 @@ function deletarCadastro(request, response) {
 }
 
 function editarCadastro(request, response) {
-    let clientBancoDeDados = novoClient()
+    let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario
     clientBancoDeDados.connect()
@@ -117,9 +77,4 @@ function editarCadastro(request, response) {
     .finally(() => clientBancoDeDados.end())
 }
 
-module.exports.login = login
-module.exports.logout = logout
-module.exports.getCadastro = getCadastro
-module.exports.inserirCadastro = inserirCadastro
-module.exports.deletarCadastro = deletarCadastro
-module.exports.editarCadastro = editarCadastro
+module.exports.router
