@@ -4,12 +4,12 @@ const router = express.Router()
 const logs = require('./logs')
 const bancoDeDados = require('../acesso_ao_banco')
 
-router.get('/', (request, response, next) => {
+router.get('/:usuario', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
-    let usuario = request.body.usuario
+    let usuario = request.params.usuario
     clientBancoDeDados.connect()
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
-    .then(() => clientBancoDeDados.query("SELECT usuario, status FROM usuarios WHERE usuario = $2", usuario))
+    .then(() => clientBancoDeDados.query("SELECT usuario, status FROM usuarios WHERE usuario = $1", [usuario]))
     .then(resultado => {
         if (resultado.rows[0] === undefined) {
             response.json({ "usuario" : false })
@@ -21,7 +21,7 @@ router.get('/', (request, response, next) => {
     .finally(() => clientBancoDeDados.end())
 })
 
-router.put('/', (request, response, next) => {
+router.post('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario
@@ -59,7 +59,7 @@ router.delete('/', (request, response, next) => {
     response.json({ "query" : false })
 })
 
-router.post('/', (request, response, next) => {
+router.put('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let senha = request.body.senha
     let usuario = request.body.usuario

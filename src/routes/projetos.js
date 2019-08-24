@@ -12,7 +12,7 @@ router.get('/', (request, response, next) => {
     .finally(() => clientBancoDeDados.end())
 })
 
-router.put('/', (request, response, next) => {
+router.post('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let titulo = request.body.titulo
     let descricao = request.body.descricao
@@ -51,7 +51,7 @@ router.delete('/', (request, response, next) => {
     .finally(() => clientBancoDeDados.end())
 })
 
-router.post('/', (request, response, next) => {
+router.put('/', (request, response, next) => {
     let clientBancoDeDados = bancoDeDados.novoClient()
     let titulo = request.body.titulo
     let tituloAntigo = request.body.tituloAntigo
