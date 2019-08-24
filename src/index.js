@@ -14,7 +14,7 @@ const PORTA = process.env.PORT || 5000
 
 var corOptions = {
     "origin": CORS_ORIGIN,
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "methods": "GET,HEAD,PUT,POST,DELETE",
 }
 
 app.use(cors(corOptions)) // Habilitando acesso de outra origem Cross-Origin Resource Sharing

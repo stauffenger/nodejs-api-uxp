@@ -12,10 +12,12 @@ router.post('/', (request, response, next) => {
     .then(() => console.log("Conexão bem sucedida com o banco de dados!"))
     .then(() => clientBancoDeDados.query("SELECT (senha = crypt($1, senha) AND status) as autenticacao, status FROM usuarios WHERE usuario = $2", [senha, usuario]))
     .then(resultado => {
-        logs.login(usuario)
         if (resultado.rows[0] === undefined) {
             response.json({ "autenticacao" : false, "status" : null })
         } else {
+            if (resultado.rows[0].autenticacao) {
+                logs.login(usuario)
+            }
             response.json(resultado.rows[0])
         }
     })
