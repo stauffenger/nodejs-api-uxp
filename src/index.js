@@ -3,11 +3,17 @@ const logs = require('./routes/logs')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const CORS_ORIGIN = process.env.CORS_ORIGIN || '*'
 const jose = require('node-jose');
 const KEY_JWE = process.env.KEY_JWE
 const PORTA = process.env.PORT || 5000
 
-app.use(cors())
+var corOptions = {
+    "origin": CORS_ORIGIN,
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+}
+
+app.use(cors(corOptions)) // Habilitando acesso de outra origem Cross-Origin Resource Sharing
 app.use(express.json()) // Transforma o JSON do body em um objeto JavaScript
 
 app.get('/', indexHandler)
