@@ -21,13 +21,13 @@ app.use(cors(corOptions)) // Habilitando acesso de outra origem Cross-Origin Res
 app.use(express.json()) // Transforma o JSON do body em um objeto JavaScript
 
 app.get('/', indexHandler)
-app.get('/:usuario', usuarioHandler)
 
 app.use('/login', loginRoutes)
 app.use('/logout', logoutRoutes)
 app.use('/logs', logsRoutes)
 app.use('/cadastro', cadastrosRoutes)
 app.use('/projetos', projetosRoutes)
+app.get('/:usuario', usuarioHandler)
 
 app.listen(PORTA)
 
